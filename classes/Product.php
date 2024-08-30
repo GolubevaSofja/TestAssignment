@@ -30,7 +30,6 @@ abstract class Product
         $this->insertIntoDatabase();
     }
 
-    // Abstract method to be implemented by child classes
     abstract protected function insertIntoDatabase();
 
     protected function skuExists($sku): bool
@@ -88,16 +87,13 @@ abstract class Product
             $db = new Database();
             $pdo = $db->getConnection();
 
-            // Prepare the SQL statement for deletion
             $inQuery = implode(',', array_fill(0, count($skus), '?'));
             $stmt = $pdo->prepare("DELETE FROM products WHERE sku IN ($inQuery)");
 
-            // Execute the statement with the array of SKUs
             $stmt->execute($skus);
 
             return true;
         } catch (\Exception $e) {
-            // Handle any exceptions or log errors as needed
             return false;
         }
     }
