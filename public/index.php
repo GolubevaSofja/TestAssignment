@@ -30,7 +30,7 @@ include '../views/header.php';
         <div class="container">
             <a class="navbar-brand" href="#">Product List</a>
             <div class="ms-auto">
-                <a href="add-product.php" class="btn btn-primary me-2">ADD</a>
+                <a href="add-product" class="btn btn-primary me-2">ADD</a>
                 <button @click="deleteSelected" class="btn btn-danger" id="delete-product-btn">MASS DELETE</button>
             </div>
         </div>
@@ -125,11 +125,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $deleted = Product::deleteProductsBySkus($skus);
 
         // Redirect regardless of deletion success, no error messages
-        header('Location: index.php');
+        header('Location: /');
         exit;
     } else {
         ob_end_clean();
-        header('Location: index.php');
+        header('Location: /');
         exit;
     }
 }

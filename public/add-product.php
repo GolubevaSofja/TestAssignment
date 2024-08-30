@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Save the product to the database
             $product->saveToDatabase();
             // Redirect to index page
-            header('Location: index.php');
+            header('Location: /');
             exit;
         } else {
             throw new Exception("Class not found: $className");
@@ -49,8 +49,8 @@ include '../views/header.php';
             <div class="ms-auto">
                 <!-- button place -->
 
-<!--                <button type="submit" class="btn btn-primary">Save</button>-->
-<!--                <button type="button" class="btn btn-secondary" @click="cancelForm">Cancel</button>-->
+                <!--                <button type="submit" class="btn btn-primary">Save</button>-->
+                <!--                <button type="button" class="btn btn-secondary" @click="cancelForm">Cancel</button>-->
             </div>
         </div>
     </nav>
@@ -202,7 +202,7 @@ include '../views/header.php';
                 form.submit();
             },
             cancelForm() {
-                window.location.href = 'index.php';
+                window.location.href = '/';
             }
         }
     });
