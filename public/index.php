@@ -18,7 +18,6 @@ require_once '../classes/Furniture.php';
 try {
     $products = Product::getAllProducts();
 } catch (Exception $e) {
-    // Handle exceptions if needed
 }
 
 include '../views/header.php';
@@ -28,9 +27,9 @@ include '../views/header.php';
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#">Product List</a>
+            <h1>Product List</h1>
             <div class="ms-auto">
-                <a href="add-product" class="btn btn-primary me-2">ADD</a>
+                <a href="add-product.php" class="btn btn-primary me-2">ADD</a>
                 <button @click="deleteSelected" class="btn btn-danger" id="delete-product-btn">MASS DELETE</button>
             </div>
         </div>
@@ -65,7 +64,7 @@ include '../views/header.php';
         data: {
             products: <?php echo json_encode($products); ?>,
             selectedProducts: [],
-            productAttributes: {  // Configuration object for product attributes
+            productAttributes: {
                 'DVD': {
                     label: 'Size',
                     format: product => `${product.size} MB`
@@ -87,13 +86,12 @@ include '../views/header.php';
             },
             deleteSelected() {
                 if (this.selectedProducts.length === 0) {
-                    return; // Simply return without an alert if no products are selected
+                    return;
                 }
 
-                // Removed the confirm dialog to directly proceed with deletion
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = ''; // Leave empty to submit to the current page
+                form.action = '';
 
                 this.selectedProducts.forEach(sku => {
                     const input = document.createElement('input');
@@ -117,19 +115,17 @@ include '../views/header.php';
 </script>
 
 <?php
-// Handle deletion on the same page
+// Handle deletion
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
     $skus = $_POST['skus'] ?? [];
 
     if (!empty($skus)) {
         $deleted = Product::deleteProductsBySkus($skus);
-
-        // Redirect regardless of deletion success, no error messages
-        header('Location: /');
+        header('Location: index.php');
         exit;
     } else {
         ob_end_clean();
-        header('Location: /');
+        header('Location: index.php');
         exit;
     }
 }

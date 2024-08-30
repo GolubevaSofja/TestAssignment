@@ -16,23 +16,19 @@ include '../classes/Database.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $type = $_POST['type'];
 
-    // Ensure the class name includes the namespace
+
     $className = "classes\\$type";
 
     try {
         if (class_exists($className)) {
-            // Create a product instance with POST data
             $product = new $className($_POST);
-            // Save the product to the database
             $product->saveToDatabase();
-            // Redirect to index page
-            header('Location: /');
+            header('Location: index.php');
             exit;
         } else {
             throw new Exception("Class not found: $className");
         }
     } catch (Exception $e) {
-        // Handle exceptions, such as duplicate SKU errors
         $errorMessage = $e->getMessage();
     }
 }
@@ -42,15 +38,14 @@ include '../views/header.php';
 ?>
 
 <div id="app">
+    <form method="POST" @submit.prevent="submitForm" id="product_form">
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#">Add Product</a>
+            <h1>Add Product</h1>
             <div class="ms-auto">
-                <!-- button place -->
-
-                <!--                <button type="submit" class="btn btn-primary">Save</button>-->
-                <!--                <button type="button" class="btn btn-secondary" @click="cancelForm">Cancel</button>-->
+                <button type="submit" class="btn btn-primary me-2">Save</button>
+                <button type="button" class="btn btn-secondary" @click="cancelForm">Cancel</button>
             </div>
         </div>
     </nav>
@@ -61,24 +56,28 @@ include '../views/header.php';
                 <?= htmlspecialchars($errorMessage) ?>
             </div>
         <?php endif; ?>
-
-        <form method="POST" @submit.prevent="submitForm" id="product_form">
+            <!-- SKU -->
             <div class="mb-3 w-50">
                 <label for="sku">SKU</label>
                 <input type="text" name="sku" id="sku" class="form-control" v-model="form.sku" required>
                 <span v-if="errors.sku" class="text-danger">{{ errors.sku }}</span>
             </div>
+
+            <!-- Name -->
             <div class="mb-3 w-50">
                 <label for="name">Name</label>
                 <input type="text" name="name" id="name" class="form-control" v-model="form.name" required>
                 <span v-if="errors.name" class="text-danger">{{ errors.name }}</span>
             </div>
+
+            <!-- Price -->
             <div class="mb-3 w-50">
                 <label for="price">Price ($)</label>
                 <input type="text" name="price" id="price" class="form-control" v-model="form.price" required>
                 <span v-if="errors.price" class="text-danger">{{ errors.price }}</span>
             </div>
 
+            <!-- Product type -->
             <div class="mb-3 w-50">
                 <label for="productType">Type</label>
                 <select name="type" id="productType" class="form-control" v-model="form.type" @change="updateTypeSpecificFields" required>
@@ -88,20 +87,22 @@ include '../views/header.php';
                 <span v-if="errors.type" class="text-danger">{{ errors.type }}</span>
             </div>
 
+            <!-- Product type description -->
             <div class="mb-3 w-50" v-if="currentType && currentType.description">
                 <p>{{ currentType.description }}</p>
             </div>
 
+            <!-- Special attribute(s) of specific type -->
             <div v-for="(field, key) in currentType.fields" :key="key" class="mb-3 w-50">
                 <label :for="key">{{ field.label }}</label>
                 <input type="text" :id="key" :name="key" class="form-control" v-model="form[key]" :required="field.required">
                 <span v-if="errors[key]" class="text-danger">{{ errors[key] }}</span>
             </div>
 
-            <div class="mt-3">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-secondary" @click="cancelForm">Cancel</button>
-            </div>
+<!--            <div class="mt-3">-->
+<!--                <button type="submit" class="btn btn-primary">Save</button>-->
+<!--                <button type="button" class="btn btn-secondary" @click="cancelForm">Cancel</button>-->
+<!--            </div>-->
 
         </form>
     </div>
@@ -202,7 +203,7 @@ include '../views/header.php';
                 form.submit();
             },
             cancelForm() {
-                window.location.href = '/';
+                window.location.href = 'index.php';
             }
         }
     });
