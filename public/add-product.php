@@ -1,12 +1,6 @@
 <?php
 // add-product.php
 
-use classes\Product;
-use classes\DVD;
-use classes\Book;
-use classes\Database;
-use classes\Furniture;
-
 include '../classes/Product.php';
 include '../classes/Book.php';
 include '../classes/DVD.php';
@@ -49,6 +43,7 @@ include '../views/header.php';
             </div>
         </div>
     </nav>
+
     <div class="container my-5">
         <!-- Display error message if exists -->
         <?php if (isset($errorMessage)): ?>
@@ -56,31 +51,29 @@ include '../views/header.php';
                 <?= htmlspecialchars($errorMessage) ?>
             </div>
         <?php endif; ?>
+
             <!-- SKU -->
             <div class="mb-3 w-50">
                 <label for="sku">SKU</label>
                 <input type="text" name="sku" id="sku" class="form-control" v-model="form.sku" required>
-                <span v-if="errors.sku" class="text-danger">{{ errors.sku }}</span>
             </div>
 
             <!-- Name -->
             <div class="mb-3 w-50">
                 <label for="name">Name</label>
                 <input type="text" name="name" id="name" class="form-control" v-model="form.name" required>
-                <span v-if="errors.name" class="text-danger">{{ errors.name }}</span>
             </div>
 
             <!-- Price -->
             <div class="mb-3 w-50">
                 <label for="price">Price ($)</label>
-                <input type="text" name="price" id="price" class="form-control" v-model="form.price" required>
-                <span v-if="errors.price" class="text-danger">{{ errors.price }}</span>
+                <input type="number" step="0.01" name="price" id="price" class="form-control" v-model="form.price" required>
             </div>
 
             <!-- Product type -->
             <div class="mb-3 w-50">
                 <label for="productType">Type</label>
-                <select name="type" id="productType" class="form-control" v-model="form.type" @change="updateTypeSpecificFields" required>
+                <select name="type" id="productType" class="form-control" v-model="form.type" required>
                     <option value="" disabled selected hidden>Please Choose...</option>
                     <option v-for="(type, key) in productTypes" :value="key">{{ key }}</option>
                 </select>
@@ -99,16 +92,16 @@ include '../views/header.php';
                 <span v-if="errors[key]" class="text-danger">{{ errors[key] }}</span>
             </div>
 
-<!--            <div class="mt-3">-->
-<!--                <button type="submit" class="btn btn-primary">Save</button>-->
-<!--                <button type="button" class="btn btn-secondary" @click="cancelForm">Cancel</button>-->
-<!--            </div>-->
-
         </form>
     </div>
 </div>
 
 <script>
+    Vue.use(Toasted, {
+        theme: "bubble",
+        duration: 1500
+    });
+
     new Vue({
         el: '#app',
         data: {
@@ -153,20 +146,8 @@ include '../views/header.php';
             }
         },
         methods: {
-            updateTypeSpecificFields() {
-                Object.keys(this.form).forEach(key => {
-                    if (key !== 'sku' && key !== 'name' && key !== 'price' && key !== 'type') {
-                        this.form[key] = '';
-                    }
-                });
-                this.errors = {};
-            },
             validateForm() {
                 this.errors = {};
-
-                if (!this.form.sku) this.errors.sku = 'SKU is required';
-                if (!this.form.name) this.errors.name = 'Name is required';
-                if (!this.form.price || isNaN(this.form.price)) this.errors.price = 'Price must be a valid number';
 
                 Object.keys(this.currentType.fields).forEach(key => {
                     const field = this.currentType.fields[key];
@@ -181,25 +162,12 @@ include '../views/header.php';
             },
             submitForm() {
                 if (!this.validateForm()) {
-                    alert('Please, provide the data of indicated type');
+                    Vue.toasted.error('Please, provide the data of indicated type');
                     return;
                 }
 
-                const form = document.createElement('form');
-                form.method = 'POST';
+                const form = document.getElementById('product_form');
 
-                Object.keys(this.form).forEach(key => {
-                    if (this.form[key] !== '') {
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = key;
-                        input.id = key;
-                        input.value = this.form[key];
-                        form.appendChild(input);
-                    }
-                });
-
-                document.body.appendChild(form);
                 form.submit();
             },
             cancelForm() {
