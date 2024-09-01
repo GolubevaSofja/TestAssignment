@@ -1,5 +1,5 @@
 <?php
-// Database.php
+
 namespace classes;
 use PDO;
 use PDOException;
@@ -8,7 +8,8 @@ class Database
 {
     private $pdo;
 
-    public function __construct() {
+    public function __construct()
+    {
         $config = require __DIR__ . '/../config/config.php';
 
         try {

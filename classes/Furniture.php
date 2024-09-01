@@ -1,5 +1,5 @@
 <?php
-// Furniture.php
+
 namespace classes;
 
 use ReturnTypeWillChange;
@@ -10,7 +10,8 @@ class Furniture extends Product implements \JsonSerializable
     protected $width;
     protected $length;
 
-    public function __construct($data) {
+    public function __construct($data)
+    {
         parent::__construct($data['sku'], $data['name'], $data['price'], $data['type']);
         $this->setHeight($data['height']);
         $this->setWidth($data['width']);
@@ -18,15 +19,37 @@ class Furniture extends Product implements \JsonSerializable
     }
 
 
-    public function getHeight() { return $this->height; }
-    public function getWidth() { return $this->width; }
-    public function getLength() { return $this->length; }
+    public function getHeight()
+    {
+        return $this->height;
+    }
 
-    public function setHeight($height): void {$this->height = $height;}
-    public function setWidth($width): void {$this->width = $width;}
-    public function setLength($length): void {$this->length = $length;}
+    public function getWidth()
+    {
+        return $this->width;
+    }
 
-    #[ReturnTypeWillChange] public function jsonSerialize(): array
+    public function getLength()
+    {
+        return $this->length;
+    }
+
+    public function setHeight($height): void
+    {
+        $this->height = $height;
+    }
+    public function setWidth($width): void
+    {
+        $this->width = $width;
+    }
+
+    public function setLength($length): void
+    {
+        $this->length = $length;
+    }
+
+    #[ReturnTypeWillChange]
+    public function jsonSerialize(): array
     {
         return [
             'sku' => $this->getSKU(),
@@ -41,7 +64,8 @@ class Furniture extends Product implements \JsonSerializable
 
     protected function insertIntoDatabase(): void
     {
-        $stmt = $this->pdo->prepare("INSERT INTO products (sku, name, price, type, height, width, length) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $this->pdo->prepare("INSERT INTO products (sku, name, price, type, height, width, length)
+        VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
             $this->getSKU(),
             $this->getName(),
@@ -52,5 +76,4 @@ class Furniture extends Product implements \JsonSerializable
             $this->getLength()
         ]);
     }
-
 }

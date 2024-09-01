@@ -1,5 +1,5 @@
 <?php
-// DVD.php
+
 namespace classes;
 
 use ReturnTypeWillChange;
@@ -8,16 +8,24 @@ class DVD extends Product implements \JsonSerializable
 {
     protected $size;
 
-    public function __construct($data) {
+    public function __construct($data)
+    {
         parent::__construct($data['sku'], $data['name'], $data['price'], $data['type']);
         $this->setSize($data['size']);
     }
 
-    public function getSize() { return $this->size; }
+    public function getSize()
+    {
+        return $this->size;
+    }
 
-    public function setSize($size): void { $this->size = $size; }
+    public function setSize($size): void
+    {
+        $this->size = $size;
+    }
 
-    #[ReturnTypeWillChange] public function jsonSerialize(): array
+    #[ReturnTypeWillChange]
+    public function jsonSerialize(): array
     {
         return [
             'sku' => $this->getSKU(),
@@ -39,5 +47,4 @@ class DVD extends Product implements \JsonSerializable
             $this->getSize()
         ]);
     }
-
 }

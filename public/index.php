@@ -1,5 +1,4 @@
 <?php
-// index.php
 
 ob_start();
 
@@ -39,7 +38,8 @@ include '../views/header.php';
                     <div class="card h-100">
                         <div class="card-body text-center">
                             <label class="d-block text-start">
-                                <input type="checkbox" class="delete-checkbox me-2" v-model="selectedProducts" :value="product.sku">
+                                <input type="checkbox" class="delete-checkbox me-2"
+                                       v-model="selectedProducts" :value="product.sku">
                             </label>
                             <h5 class="card-title mt-3">{{ product.sku }}</h5>
                             <p class="card-text">{{ product.name }}</p>
@@ -111,7 +111,6 @@ include '../views/header.php';
 </script>
 
 <?php
-// Handle deletion
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
     $skus = $_POST['skus'] ?? [];
 

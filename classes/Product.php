@@ -1,5 +1,5 @@
 <?php
-// Product.php
+
 namespace classes;
 use PDO;
 
@@ -11,7 +11,8 @@ abstract class Product
     protected $type;
     protected $pdo;
 
-    public function __construct($sku, $name, $price, $type) {
+    public function __construct($sku, $name, $price, $type)
+    {
         $this->setSKU($sku);
         $this->setName($name);
         $this->setPrice($price);
@@ -40,21 +41,45 @@ abstract class Product
         return $stmt->fetchColumn() > 0;
     }
 
-    public function getSKU() { return $this->sku; }
-    public function getName() { return $this->name; }
-    public function getPrice() { return $this->price; }
-    public function getType() {return $this->type; }
+    public function getSKU()
+    {
+        return $this->sku;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
 
     public function setSKU($sku): void
-    { $this->sku = $sku; }
-    public function setName($name): void
-    { $this->name = $name; }
-    public function setPrice($price): void
-    { $this->price = $price; }
-    public function setType($type): void
-    { $this->type = $type; }
+    {
+        $this->sku = $sku;
+    }
 
-    public static function getAllProducts(): false|array
+    public function setName($name): void
+    {
+        $this->name = $name;
+    }
+    public function setPrice($price): void
+    {
+        $this->price = $price;
+    }
+    public function setType($type): void
+    {
+        $this->type = $type;
+    }
+
+    public static function getAllProducts(): array
     {
         $db = new Database();
         $pdo = $db->getConnection();
@@ -97,5 +122,4 @@ abstract class Product
             return false;
         }
     }
-
 }

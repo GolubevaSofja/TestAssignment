@@ -1,5 +1,4 @@
 <?php
-// add-product.php
 
 include '../classes/Product.php';
 include '../classes/Book.php';
@@ -33,24 +32,24 @@ include '../views/header.php';
 
 <div id="app">
     <form method="POST" @submit.prevent="submitForm" id="product_form">
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <h1>Add Product</h1>
-            <div class="ms-auto">
-                <button type="submit" class="btn btn-primary me-2">Save</button>
-                <button type="button" class="btn btn-secondary" @click="cancelForm">Cancel</button>
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <h1>Add Product</h1>
+                <div class="ms-auto">
+                    <button type="submit" class="btn btn-primary me-2">Save</button>
+                    <button type="button" class="btn btn-secondary" @click="cancelForm">Cancel</button>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    <div class="container my-5">
-        <!-- Display error message if exists -->
-        <?php if (isset($errorMessage)): ?>
-            <div class="alert alert-danger mt-3">
-                <?= htmlspecialchars($errorMessage) ?>
-            </div>
-        <?php endif; ?>
+        <div class="container my-5">
+            <!-- Display error message if exists -->
+            <?php if (isset($errorMessage)) : ?>
+                <div class="alert alert-danger mt-3">
+                    <?= htmlspecialchars($errorMessage) ?>
+                </div>
+            <?php endif; ?>
 
             <!-- SKU -->
             <div class="mb-3 w-50">
@@ -67,7 +66,8 @@ include '../views/header.php';
             <!-- Price -->
             <div class="mb-3 w-50">
                 <label for="price">Price ($)</label>
-                <input type="number" step="0.01" name="price" id="price" class="form-control" v-model="form.price" required>
+                <input type="number" step="0.01" name="price" id="price"
+                       class="form-control" v-model="form.price" required>
             </div>
 
             <!-- Product type -->
@@ -88,12 +88,13 @@ include '../views/header.php';
             <!-- Special attribute(s) of specific type -->
             <div v-for="(field, key) in currentType.fields" :key="key" class="mb-3 w-50">
                 <label :for="key">{{ field.label }}</label>
-                <input type="text" :id="key" :name="key" class="form-control" v-model="form[key]" :required="field.required">
+                <input type="text" :id="key" :name="key" class="form-control"
+                       v-model="form[key]" :required="field.required">
                 <span v-if="errors[key]" class="text-danger">{{ errors[key] }}</span>
             </div>
 
-        </form>
-    </div>
+    </form>
+</div>
 </div>
 
 <script>
