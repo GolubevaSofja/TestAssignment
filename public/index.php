@@ -4,10 +4,6 @@
 ob_start();
 
 use classes\Product;
-use classes\DVD;
-use classes\Book;
-use classes\Database;
-use classes\Furniture;
 
 require_once '../classes/Database.php';
 require_once '../classes/Product.php';
